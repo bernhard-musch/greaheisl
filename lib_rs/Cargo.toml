@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+
+members = [
+    "greaheisl_emu",
+    "greaheisl_lib", 
+    "greaheisl_typeset",
+    "greaheisl_bitvecimg",
+    "greaheisl_async", 
+    "greaheisl_button_processor",
+]
+
+

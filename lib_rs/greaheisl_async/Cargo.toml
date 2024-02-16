@@ -1,0 +1,20 @@
+[package]
+name = "greaheisl_async"
+version = "0.1.0"
+edition = "2021"
+authors = ["Bernhard Musch"]
+description = "simple async multitasking for single-core embedded devices"
+readme = "../../readme.md"
+repository = "https://github.com/bernhard-musch/greaheisl/"
+license = "Apache-2.0/MIT"
+keywords = ["no_std","embedded","multitasking","executor"]
+rust-version = "1.75.0"
+
+
+[features]
+default = ["std"]
+std = []
+
+[dependencies]
+ambassador = "0.3.5"
+pin-project = "1.1.3"

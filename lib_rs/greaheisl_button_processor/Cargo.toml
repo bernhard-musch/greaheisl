@@ -1,0 +1,20 @@
+[package]
+name = "greaheisl_button_processor"
+version = "0.1.0"
+edition = "2021"
+authors = ["Bernhard Musch"]
+description = "translates button state changes into events"
+readme = "../../readme.md"
+repository = "https://github.com/bernhard-musch/greaheisl/"
+license = "Apache-2.0/MIT"
+keywords = ["no_std","embedded","buttons"]
+rust-version = "1.75.0"
+
+[features]
+default = ["std"]
+std = ["greaheisl_async/std"]
+
+[dependencies.greaheisl_async]
+version = "0.1.0"
+path = "../greaheisl_async"
+default-features = false

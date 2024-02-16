@@ -1,0 +1,22 @@
+[package]
+name = "greaheisl_typeset"
+version = "0.1.0"
+edition = "2021"
+authors = ["Bernhard Musch"]
+description = "typesetting based on simple abstract definition of font and glyph"
+readme = "../../readme.md"
+repository = "https://github.com/bernhard-musch/greaheisl/"
+license = "Apache-2.0/MIT"
+keywords = ["font", "typography", "no_std", "embedded"]
+rust-version = "1.75.0"
+
+[features]
+default = ["std"]
+std = ["dep:blanket"]
+
+[dependencies]
+blanket = {version = "0.3.0", optional = true}
+
+[dependencies.num]
+version = "0.4"
+default-features = false

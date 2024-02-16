@@ -1,0 +1,28 @@
+[package]
+name = "greaheisl_emu"
+version = "0.1.0"
+edition = "2021"
+authors = ["Bernhard Musch"]
+description = "runs the timer control library in an emulated environment on the console"
+readme = "../../readme.md"
+repository = "https://github.com/bernhard-musch/greaheisl/"
+license = "Apache-2.0/MIT"
+keywords = ["emulator","console"]
+rust-version = "1.75.0"
+
+[dependencies]
+
+# comment out the following line to link directly against the static C library
+greaheisl_lib = { version = "0.2.0", path = "../greaheisl_lib" }
+
+greaheisl_async = { version = "0.1.0", path = "../greaheisl_async" }
+greaheisl_button_processor = { version = "0.1.0", path = "../greaheisl_button_processor" }
+
+crossterm = "0.27.0"
+chrono = "0.4.26"
+num = "0.4.1"
+anyhow = "1.0.74"
+bitvec = {version = "1.0.1", default-features = false}
+ambassador = "0.3.5"
+
+# static_assertions = "1.1.0"

@@ -1,0 +1,30 @@
+[package]
+name = "greaheisl_bitvecimg"
+version = "0.1.0"
+edition = "2021"
+authors = ["Bernhard Musch"]
+description = "bitmapped 2D image represented in memory as bitvec"
+readme = "../../readme.md"
+repository = "https://github.com/bernhard-musch/greaheisl/"
+license = "Apache-2.0/MIT"
+keywords = ["no_std","embedded","buttons"]
+rust-version = "1.75.0"
+
+[features]
+default = ["std"]
+std = ["greaheisl_typeset/std"]
+font = ["dep:greaheisl_typeset"]
+fitzl_font = ["font"]
+
+[package.metadata.docs.rs]
+all-features = true
+
+[dependencies.greaheisl_typeset]
+version = "0.1.0"
+path = "../greaheisl_typeset"
+default-features = false
+optional = true 
+
+[dependencies.bitvec]
+version = "1.0.1"
+default-features = false
