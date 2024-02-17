@@ -6,8 +6,8 @@ use std::time::{Duration, Instant};
 use crossterm::event::{
     KeyboardEnhancementFlags, PopKeyboardEnhancementFlags, PushKeyboardEnhancementFlags,
 };
-use greaheisl_lib::system::{RtcTime, SignalFlags, NUM_RELAYS};
 use greaheisl_button_processor::AccessButtonSignal;
+use greaheisl_lib::system::{RtcTime, SignalFlags, NUM_RELAYS};
 
 use anyhow::Result;
 use bitvec::view::BitView;
@@ -20,10 +20,10 @@ use std::sync::{Arc, Mutex};
 // extern crate greaheisl;
 
 use ambassador::Delegate;
-use greaheisl_lib::system::buttons::ButtonFlags;
 use greaheisl_async::{ambassador_impl_AccessExecutorSignals, ambassador_impl_AccessTiming};
 use greaheisl_async::{AccessExecutorSignals, AccessTiming, DurationWrapper};
 use greaheisl_async::{DurationMillis, InstantMillis};
+use greaheisl_lib::system::buttons::ButtonFlags;
 
 // use greaheisl::show_clock;
 
@@ -37,8 +37,10 @@ extern "C" {
 fn write_matrix<F: std::fmt::Write>(writer: &mut F, matrix: &[u32]) -> Result<()> {
     let width = 12;
     let height = 8;
+    writer.write_str("+------------+\n\r")?;
     let matrix = matrix.view_bits::<bitvec::order::Msb0>();
     for i_line in 0..height / 2 {
+        writer.write_str("|")?;
         let p1 = (i_line * 2) * width;
         let p2 = p1 + width;
         let bits1 = matrix[p1 as usize..(p1 + width) as usize].iter();
@@ -58,9 +60,11 @@ fn write_matrix<F: std::fmt::Write>(writer: &mut F, matrix: &[u32]) -> Result<()
                 }
             }
         }
+        writer.write_str("|")?;
         writer.write_char('\n')?;
         writer.write_char('\r')?;
     }
+    writer.write_str("+------------+\n\r")?;
     Ok(())
 }
 
@@ -72,7 +76,7 @@ fn write_matrix<F: std::fmt::Write>(writer: &mut F, matrix: &[u32]) -> Result<()
 struct CliCallbacks<S> {
     buttons: Arc<Mutex<ButtonFlags>>,
     scheduler: S,
-    relais_states: Arc<Mutex<[bool; greaheisl_lib::system::NUM_RELAYS]>>,
+    relay_states: Arc<Mutex<[bool; greaheisl_lib::system::NUM_RELAYS]>>,
     time_shift_seconds: Mutex<i32>,
 }
 
@@ -119,7 +123,7 @@ impl<S> greaheisl_lib::system::AccessLedMatrix for CliCallbacks<S> {
     fn set_led_matrix(&self, matrix: &[u32; 3]) {
         let mut s = String::new();
         write_matrix(&mut s, matrix).unwrap();
-        stdout().queue(crossterm::cursor::MoveTo(0, 1)).unwrap();
+        stdout().queue(crossterm::cursor::MoveTo(0, 2)).unwrap();
         write!(stdout(), "{}", s).unwrap();
         stdout().flush().unwrap();
     }
@@ -140,7 +144,7 @@ impl<S: AccessExecutorSignals<SignalFlags>> AccessButtonSignal for CliCallbacks<
 
 impl<S> greaheisl_lib::system::AccessOutputStates for CliCallbacks<S> {
     fn set_relay_states(&self, relais_states: &[bool; greaheisl_lib::system::NUM_RELAYS]) {
-        *self.relais_states.lock().unwrap() = *relais_states;
+        *self.relay_states.lock().unwrap() = *relais_states;
     }
 }
 
@@ -165,17 +169,30 @@ fn run() -> Result<()> {
     let instant = instantmillis_from_duration(start_instant.elapsed());
     let executor = greaheisl_async::MiniExecutor::new(instant);
     let buttons = Arc::new(Mutex::new(ButtonFlags::none()));
-    let relais_states = Arc::new(Mutex::new([false; NUM_RELAYS]));
+    let relay_states = Arc::new(Mutex::new([false; NUM_RELAYS]));
     let callbacks = CliCallbacks {
         buttons: buttons.clone(),
         scheduler: executor.scheduler().clone(),
-        relais_states: relais_states.clone(),
+        relay_states: relay_states.clone(),
         time_shift_seconds: Mutex::new(0),
     };
     let task = greaheisl_lib::run(callbacks);
     let mut executor = executor.build(task);
     let mut next_delay_millis: DurationMillis = 100;
     stdout().execute(terminal::Clear(terminal::ClearType::All))?;
+    stdout().queue(crossterm::cursor::MoveTo(0, 0)).unwrap();
+    write!(stdout(), "GREAHEISL BOARD EMULATOR\n\r").unwrap();
+    stdout().queue(crossterm::cursor::MoveTo(0, 8)).unwrap();
+    write!(
+        stdout(),
+        "Use a terminal supporting the kitty keyboard protocol.\n\r"
+    )
+    .unwrap();
+    write!(
+        stdout(),
+        "Use arrow keys as buttons. Press Ctrl-C to exit.\n\r"
+    )
+    .unwrap();
     //stdout().execute(crossterm::cursor::SavePosition)?;
     loop {
         let mut signals = SignalFlags::none();
@@ -219,9 +236,20 @@ fn run() -> Result<()> {
                 _ => {}
             }
         }
-        stdout().queue(crossterm::cursor::MoveTo(0, 0)).unwrap();
-        write!(stdout(), "{:04b}", buttons.lock().unwrap().bits()).unwrap();
-        write!(stdout(), " {:?}", relais_states.lock().unwrap()).unwrap();
+        stdout().queue(crossterm::cursor::MoveTo(0, 1)).unwrap();
+        write!(
+            stdout(),
+            "Button states: {:04b}",
+            buttons.lock().unwrap().bits()
+        )
+        .unwrap();
+        let relay_bits: String = relay_states
+            .lock()
+            .unwrap()
+            .iter()
+            .map(|b| if *b { '1' } else { '0' })
+            .collect();
+        write!(stdout(), "  Relay states: {}", relay_bits).unwrap();
         stdout().flush().unwrap();
         /* This was for testing the original C library interface
         let mut screen : [u32;3] = [0;3];
@@ -251,6 +279,7 @@ fn main() -> Result<()> {
         KeyboardEnhancementFlags::REPORT_EVENT_TYPES,
     ))?;
     let res = run();
+    stdout().queue(crossterm::cursor::MoveTo(0, 11))?;
     stdout().execute(PopKeyboardEnhancementFlags)?;
     terminal::disable_raw_mode()?;
     res

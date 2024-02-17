@@ -1,6 +1,6 @@
 # Greaheisl
 
-Timer control on the Arduino UNO R4 Wifi.
+Hobby project to switch on and off appliances using an Arduino Uno R4 Wifi.
 
 ## How to test in the terminal
 

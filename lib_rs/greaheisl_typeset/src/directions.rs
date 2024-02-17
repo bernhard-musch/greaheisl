@@ -1,5 +1,3 @@
-
-
 use num::traits::{CheckedNeg, Zero};
 
 #[derive(Clone, Copy, Debug)]

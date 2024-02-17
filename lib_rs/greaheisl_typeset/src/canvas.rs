@@ -3,7 +3,7 @@ use super::GlyphMetrics;
 #[cfg(feature = "std")]
 use blanket::blanket;
 
-#[cfg_attr(feature="std",blanket(derive(Box)))]
+#[cfg_attr(feature = "std", blanket(derive(Box)))]
 pub trait DrawGlyph<G: GlyphMetrics> {
     /// Draws a glyph a the given position.
     ///

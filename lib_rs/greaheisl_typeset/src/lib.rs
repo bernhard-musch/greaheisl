@@ -1,7 +1,7 @@
 // no_std only when freature "std" is missing
 #![cfg_attr(not(feature = "std"), no_std)]
 
-#[cfg(feature="std")]
+#[cfg(feature = "std")]
 use blanket::blanket;
 
 use num::traits::{CheckedAdd, CheckedNeg, CheckedSub};
@@ -13,7 +13,7 @@ use directions::{Axis2D, RectDirection};
 pub mod canvas;
 use canvas::DrawGlyph;
 
-#[cfg_attr(feature = "std",blanket(derive(Rc, Arc, Box)))]
+#[cfg_attr(feature = "std", blanket(derive(Rc, Arc, Box)))]
 pub trait GlyphMetrics {
     /// data type for graphics coordinates, displacements and lengths
     type Length: num::Num + CheckedNeg + CheckedAdd + CheckedSub + Ord + Copy;
@@ -40,15 +40,15 @@ pub trait GlyphMetrics {
     fn margin(&self, side: RectDirection) -> Self::Length;
 }
 
-impl <T: GlyphMetrics> GlyphMetrics for &T {
+impl<T: GlyphMetrics> GlyphMetrics for &T {
     type Length = T::Length;
-    fn base_point(&self) -> [Self::Length;2] {
+    fn base_point(&self) -> [Self::Length; 2] {
         (**self).base_point()
     }
-    fn size(&self) -> [Self::Length;2] {
+    fn size(&self) -> [Self::Length; 2] {
         (**self).size()
     }
-    fn margin(&self,side:RectDirection) -> Self::Length {
+    fn margin(&self, side: RectDirection) -> Self::Length {
         (**self).margin(side)
     }
 }
@@ -115,7 +115,7 @@ pub struct FontMetrics<L> {
     pub line_to_line_distance: L,
 }
 
-#[cfg_attr(feature = "std",blanket(derive(Rc, Arc, Box)))]
+#[cfg_attr(feature = "std", blanket(derive(Rc, Arc, Box)))]
 pub trait FontInfo {
     type Glyph: GlyphMetrics;
     fn get_font_spec(
@@ -142,7 +142,7 @@ impl<T: FontInfo> FontInfo for &T {
     }
 }
 
-#[cfg_attr(feature = "std",blanket(derive(Rc, Arc, Box)))]
+#[cfg_attr(feature = "std", blanket(derive(Rc, Arc, Box)))]
 pub trait Font: FontInfo {
     type GlyphIterator<'a>: Iterator<Item = Result<Self::Glyph, char>>
     where
@@ -163,7 +163,7 @@ impl<T: Font> Font for &T {
     }
     fn str_to_glyphs<'a, 'b: 'a>(&'b self, text: &'a str) -> Self::GlyphIterator<'a>
     where
-        Self: 'a 
+        Self: 'a,
     {
         (**self).str_to_glyphs(text)
     }
