@@ -4,7 +4,7 @@
 //! This crate can be used in two ways:
 //! * It can be compiled as a no-std library and statically linked into the C++ Arduino sketch.
 //!   The corresponding C API is defined in module [interface_c].
-//! * It can be compiled as a normal library to be used with the test application in the `cli/` directory.
+//! * It can be compiled as a normal library to be used with the `greaheisl-emu` test application.
 //!
 
 // no_std only when freature "std" is missing

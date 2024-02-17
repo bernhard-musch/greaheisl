@@ -3,14 +3,18 @@
 This repository started as a hobby project to provide programmable timers for switching on and off appliances. The chosen hardware consisted of an Arduino Uno R4 Wifi, a board with relays, and some push buttons for user interaction.
 
 The software is structured into 
-* C++ code intended to be compiled and uploaded onto the hardware using the the Arduino IDE, and making use of
-  * a statically linked library with a C compatible interface, written in Rust, making use of
-    * several non-std Rust crates that may be usefu for other, similar projects as well  
-* an "emulator", written in Rust, to test the user interface interactively on a regular PC 
+* [C++ code](prog/greaheisl/greaheisl.ino) intended to be compiled and uploaded onto the hardware using the the Arduino IDE, and making use of
+  * a [statically linked library](lib_rs/greaheisl_lib/) with a C compatible interface, written in Rust, making use of several non-std Rust crates that may be usefu for other, similar projects as well:
+    * [greaheisl_async](lib_rs/greaheisl_async/) - a simple executor that can be integrated into the event loop of the embedded device
+    * [greaheisl_button_processor](lib_rs/greaheisl_button_processor/) - monitors the low level button states and emits button events
+    * [greaheisl_typeset](lib_rs/greaheisl_typeset/) - abstract definion of glyphs and fonts and typesetting of a single line of text
+    * [greheisl_bitvecimg](lib_rs/greaheisl_bitvecimg/) - a 2-dimensional image stored in memory using [bitvec](https://github.com/ferrilab/bitvec)
+* an ["emulator"](lib_rs/greaheisl_emu/), written in Rust, to test the user interface interactively on a regular PC 
 
-The project demonstrates that
-* It is an attractive solution to write the majority of the code in memory safe Rust for a generic no-std target, and then to embed this library in a C++ program, thus making use of the existing, convenient, hardware-specific C++ libraries.
+What I learned from this project:
+* It is an attractive solution to write the majority of the code in memory safe Rust for a generic no-std target, and then to embed this library in a C++ program, thus conveniently making use of the existing, hardware-specific C++ libraries and tools.
 * Instead of writing complicated state machines, we can use Rust async to quickly set up a simple framework for quasi concurrent execution of code. 
+* In Rust, it is possible and relatively painless to make software components reusable by splitting off generic functionality and moving it into separate crates. (Except that the "orphan rule" can be a pain.)
 
 ## How run the "emulator" 
 
