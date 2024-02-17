@@ -4,11 +4,11 @@ This repository started as a hobby project to provide programmable timers for sw
 
 The software is structured into 
 * [C++ code](prog/greaheisl/greaheisl.ino) intended to be compiled and uploaded onto the hardware using the the Arduino IDE, and making use of
-  * a [statically linked library](lib_rs/greaheisl_lib/) with a C compatible interface, written in Rust, making use of several non-std Rust crates that may be usefu for other, similar projects as well:
+  * a [statically linked library](lib_rs/greaheisl_lib/) with a C compatible interface, written in Rust, making use of several no-std Rust crates that may be useful for other, similar projects as well:
     * [greaheisl_async](lib_rs/greaheisl_async/) - a simple executor that can be integrated into the event loop of the embedded device
     * [greaheisl_button_processor](lib_rs/greaheisl_button_processor/) - monitors the low level button states and emits button events
     * [greaheisl_typeset](lib_rs/greaheisl_typeset/) - abstract definion of glyphs and fonts and typesetting of a single line of text
-    * [greheisl_bitvecimg](lib_rs/greaheisl_bitvecimg/) - a 2-dimensional image stored in memory using [bitvec](https://github.com/ferrilab/bitvec)
+    * [greheisl_bitvecimg](lib_rs/greaheisl_bitvecimg/) - a 2-dimensional b/w bitmap image stored in memory using [bitvec](https://github.com/ferrilab/bitvec)
 * an ["emulator"](lib_rs/greaheisl_emu/), written in Rust, to test the user interface interactively on a regular PC 
 
 What I learned from this project:
@@ -16,7 +16,9 @@ What I learned from this project:
 * Instead of writing complicated state machines, we can use Rust async to quickly set up a simple framework for quasi concurrent execution of code. 
 * In Rust, it is possible and relatively painless to make software components reusable by splitting off generic functionality and moving it into separate crates. (Except that the "orphan rule" can be a pain.)
 
-## How run the "emulator" 
+## How to run the "emulator" 
+
+Install [Rust](https://www.rust-lang.org/) according to their web site.
 
 The `lib_rs/greaheisl_emu/` directory conains a Rust terminal application that can be used to test the Rust part of the software interactively on your PC. You do not need to have the Arduino hardware to try that out. 
 
@@ -41,6 +43,10 @@ Enter         | right arrow key
 The first line of the terminal application shows
 * The states of the four buttons (0=released, 1=pressed)
 * The states of the four relays (as booleans)
+
+## user manual  
+
+The description what you can do with the software can be found [here](./user_manual.md)
 
 ## pin configuration on Arduino UNO R4 Wifi
 
@@ -105,7 +111,8 @@ To cross compile the library for use on the Arduino Rev4 Wifi use the following 
 ./make_arduino_lib.sh
 ```
 
-This will build a static library and store the results in `prog/libraries/greaheisl_lib`.
+
+This will build a static library, clear the directory `prog/libraries/greaheisl_lib` and copy the library there.
 
 Now install and open the [Arduino IDE 2.x](https://www.arduino.cc/en/software). Go to `File` -> `Preferences...` -> `Settings` -> `Sketchbook location:` and specify the full path to `prog/`.
 
