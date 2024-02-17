@@ -1,8 +1,18 @@
 # Greaheisl
 
-Hobby project to switch on and off appliances using an Arduino Uno R4 Wifi.
+This repository started as a hobby project to provide programmable timers for switching on and off appliances. The chosen hardware consisted of an Arduino Uno R4 Wifi, a board with relays, and some push buttons for user interaction.
 
-## How to test in the terminal
+The software is structured into 
+* C++ code intended to be compiled and uploaded onto the hardware using the the Arduino IDE, and making use of
+  * a statically linked library with a C compatible interface, written in Rust, making use of
+    * several non-std Rust crates that may be usefu for other, similar projects as well  
+* an "emulator", written in Rust, to test the user interface interactively on a regular PC 
+
+The project demonstrates that
+* It is an attractive solution to write the majority of the code in memory safe Rust for a generic no-std target, and then to embed this library in a C++ program, thus making use of the existing, convenient, hardware-specific C++ libraries.
+* Instead of writing complicated state machines, we can use Rust async to quickly set up a simple framework for quasi concurrent execution of code. 
+
+## How run the "emulator" 
 
 The `lib_rs/greaheisl_emu/` directory conains a Rust terminal application that can be used to test the Rust part of the software interactively on your PC. You do not need to have the Arduino hardware to try that out. 
 
@@ -61,10 +71,10 @@ The software configures 4 pins of the Arduino Uno R4 Wifi board as outputs that 
 Here is just a selection of important aspects you need to have under control:
 * voltages dangerous to the human body
 * proper insulation
-* safe wire connections
+* stable connections of the wires
 * adequate dimensioning and placement of fuses
 * required conductor cross sections
-* compatibility of the connected devices 
+* compatibility of the connected devices and their specified limitations 
 * humidity and temperature, cooling / ventilation
 * flammeable materials near electric components
 * protection of other people, potentially children 
