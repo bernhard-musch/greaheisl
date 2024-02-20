@@ -1,3 +1,13 @@
+//! This library defines what a font is and helps with typesetting.
+//! 
+//! * designed to support different writing directions, but I do not know
+//!   if this is sufficient to support all major written languages
+//! * independent of how the font is rendered (pixel font / splines / ... )
+//! * designed with no_std-compatibility in mind
+//! * may lack some important features, since I have little knowledge of typography
+//! * not well tested at all, especialy for other writing directions or coordinate conventions
+//! * So far, typesetting is restricted to a single line of text.
+
 // no_std only when freature "std" is missing
 #![cfg_attr(not(feature = "std"), no_std)]
 
@@ -14,6 +24,7 @@ pub mod canvas;
 use canvas::DrawGlyph;
 
 #[cfg_attr(feature = "std", blanket(derive(Rc, Arc, Box)))]
+/// size, margin and placement of a glyph
 pub trait GlyphMetrics {
     /// data type for graphics coordinates, displacements and lengths
     type Length: num::Num + CheckedNeg + CheckedAdd + CheckedSub + Ord + Copy;
@@ -53,15 +64,15 @@ impl<T: GlyphMetrics> GlyphMetrics for &T {
     }
 }
 
-/// responsible for positioning glyphs along a line in writing direction
+/// positioning of glyphs along a line in writing direction
 ///
 /// After each typesetting operation, the internal position is shifted,
 /// such that the next glyph is placed in an adjacent position.
 /// The margins defined by the glyphs determine the free space
 /// between the glyphs. For example, if the writing direction is
 /// left to right, then the right margin of the previous glyph
-/// and the left margin of the current glyph determine the space
-/// between the two.
+/// or the left margin of the current glyph, whichever one is larger,
+/// determines the space between the glyphs.
 ///
 /// The line typesetter does not support placing several
 /// glyphs on top of each other. This might be desirable to
@@ -75,6 +86,9 @@ pub struct LineTypesetter<L> {
 }
 
 impl<L: num::Num + CheckedNeg + CheckedAdd + CheckedSub + Ord + Copy> LineTypesetter<L> {
+    /// constructor
+    ///
+    /// `initial_pos_xy` is the initial writing position and sets the base line.
     pub fn new(initial_pos_xy: [L; 2], writing_direction: RectDirection) -> LineTypesetter<L> {
         LineTypesetter {
             pos_unrot: writing_direction.unrotate_vec(initial_pos_xy),
@@ -82,6 +96,13 @@ impl<L: num::Num + CheckedNeg + CheckedAdd + CheckedSub + Ord + Copy> LineTypese
             last_margin: None,
         }
     }
+    /// returns the x,y-coordinates where to place the glyph and advances the writing position
+    ///
+    /// The way typeset_glyph works, the glyphs you typeset will never overlap.
+    /// 
+    /// If you have a character that is made up of several overlapping glyphs,
+    /// you need to construct a glyph type that is able to 
+    /// combine several glyphs into one "super glyph".
     pub fn typeset_glyph(&mut self, glyph: &impl GlyphMetrics<Length = L>) -> [L; 2] {
         let margin = if let Some(last_margin) = self.last_margin {
             last_margin.max(glyph.margin(self.writing_direction.opposite()))
@@ -99,30 +120,53 @@ impl<L: num::Num + CheckedNeg + CheckedAdd + CheckedSub + Ord + Copy> LineTypese
         self.last_margin = Some(glyph.margin(self.writing_direction));
         self.writing_direction.rotate_vec(result_unrot)
     }
+    /// returns the current writing position
+    ///
+    /// Each time a glyph is placed using [`LineTypesetter::typeset_glyph`],
+    /// the current writing position advances in writng direction,
+    /// along the base line.
     pub fn pos_xy(&self) -> [L; 2] {
         self.writing_direction.rotate_vec(self.pos_unrot)
     }
     pub fn writing_direction(&self) -> RectDirection {
         self.writing_direction
     }
+    /// advances the writing position along the base line by the given length
     pub fn skip(&mut self, width: L) {
         self.pos_unrot[0] = self.pos_unrot[0].checked_add(&width).unwrap();
     }
 }
 
+/// geometric properties of a font (rather than the individual glyph)
 pub struct FontMetrics<L> {
+    /// determines where to place the first base line relative to the coordinate origin of the text box
+    ///
+    /// This is an x-coordinate if the line feed direction is along the x-axis, otherwise a y-coordinate.
     pub base_line_offset: L,
+    /// distance between two base lines
     pub line_to_line_distance: L,
 }
 
 #[cfg_attr(feature = "std", blanket(derive(Rc, Arc, Box)))]
+/// basic information and capabilities associated with a font
 pub trait FontInfo {
+    /// the type of a glyph
     type Glyph: GlyphMetrics;
+    /// get FontMetrics information depending on line feed axis
+    ///
+    /// If the given `line_feed_axis` is not supported by the font,
+    /// the function returns `None`.
+    /// The function should not return `None` for 
+    /// `default_line_feed_direction().axis()`.
     fn get_font_spec(
         &self,
         line_feed_axis: Axis2D,
     ) -> Option<FontMetrics<<Self::Glyph as GlyphMetrics>::Length>>;
+    /// The default line feed direction of the font.
     fn default_line_feed_direction(&self) -> RectDirection;
+    /// The default writing direction of the font.
+    ///
+    /// Must be orthogonal to the default line feed direction.
     fn default_writing_direction(&self) -> RectDirection;
 }
 
@@ -143,15 +187,33 @@ impl<T: FontInfo> FontInfo for &T {
 }
 
 #[cfg_attr(feature = "std", blanket(derive(Rc, Arc, Box)))]
+/// abstract definition of a font
+///
+/// A font is characterized by its ability to translate a string
+/// into a sequence of glyphs.
 pub trait Font: FontInfo {
     type GlyphIterator<'a>: Iterator<Item = Result<Self::Glyph, char>>
     where
         Self: 'a;
-    /// only works for simple characters / fonts
+    /// Represents a character as a glyph. This only works for simple characters / fonts.
+    /// 
+    /// If you apply this function to the
+    /// sequence of characters in a string, you do not necessarily
+    /// get the same result as you would get from applying
+    /// `str_to_glyph` to that string as a whole. 
+    /// One obvious reason for this is that `str_to_glyph` can detect where
+    /// to place ligatures, whereas `char_to_glyph` obviously cannot.
     fn char_to_glyph(&self, ch: char) -> Result<Self::Glyph, char>;
+    /// translates a UTF8 string into a sequence of non-overlapping glyphs to be
+    /// typeset using, e.g. `LineTypesetter`.
     fn str_to_glyphs<'a, 'b: 'a>(&'b self, text: &'a str) -> Self::GlyphIterator<'a>
     where
         Self: 'a;
+    /// suggested symbol to be shown when a character is not defined
+    ///
+    /// Typically, fonts implement only a subset of the UTF8 character set.
+    /// If a character is encountered for which no glyph is provided,
+    /// we can substitude this glyph to make the problem obvious to the reader.
     fn default_notdef_glyph(&self) -> Option<Self::Glyph>;
 }
 
@@ -172,6 +234,14 @@ impl<T: Font> Font for &T {
     }
 }
 
+/// pre-defined iterator to make it easy to implement simple fonts
+///
+/// What we mean by simple fonts in this context: A font that
+/// associates exactly one glyph with each one of the characters it supports.
+/// For example, a simple font does not recognize and substitute ligatures.
+/// In this case, it does not matter whether you use `str_to_glyphs`
+/// or `char_to_glyph` on the sequence of characters. You 
+/// get the same result in both cases.
 pub struct SimpleFontGlyphIterator<'a, F> {
     pub font: &'a F,
     pub text: core::str::Chars<'a>,
@@ -203,15 +273,20 @@ pub trait GlyphPrinter {
 
 //Blanket macro does not work due to print_uint generics.
 //#[blanket(derive(Mut,Box))]
+/// capabilities a "text printer" should have
 pub trait TextPrinterTrait {
+    /// print a single character
     fn print_char(&mut self, ch: char) -> Result<(), PrinterError>;
+    /// print a string
     fn print_str(&mut self, s: &str) -> Result<(), PrinterError>;
+    /// print a decimal digit
     fn print_digit(&mut self, digit: u8) -> Result<(), PrinterError> {
         let Some(ch) = char::from_digit(digit as u32, 10) else {
             panic!("`print_digit() expects a digit in the range 0..9.")
         };
         self.print_char(ch)
     }
+    /// print an unsigned integer as a decimal number with a fixed amount of digits
     fn print_uint<
         T: num::Integer + Copy + num::ToPrimitive + num::FromPrimitive + num::traits::Unsigned,
         const N: usize,
@@ -279,6 +354,7 @@ impl<U: TextPrinterTrait> TextPrinterTrait for Box<U> {
     }
 }
 
+/// prints a single line of text; no support for line feed
 pub struct TextLinePrinter<G, F>
 where
     F: Font,
@@ -287,6 +363,9 @@ where
 {
     pub font: F,
     pub canvas: G,
+    /// what to do when asked to print characters for which the font does not define glyphs
+    /// 
+    /// If set to `None`, missing glyph definitions result in an error.
     pub notdef_glyph: Option<F::Glyph>,
     pub typesetter: LineTypesetter<<F::Glyph as GlyphMetrics>::Length>,
 }
@@ -298,6 +377,14 @@ where
     F::Glyph: GlyphMetrics,
 {
     /// create a `TextLinePrinter` with defaults
+    ///
+    /// The `canvas` is anything that supports drawing glyphs on it.
+    ///
+    /// * The writing direction is set to the default defined by the font.
+    /// * `notdef_glyph` is set to the default defined by the font.
+    /// *  The initial position of the `typesetter` is chosen such that
+    ///    the origin of the text box is at (0,0).
+    /// You can change these values afterwards.
     pub fn new(canvas: G, font: F) -> Self {
         let writing_dir = font.default_writing_direction();
         let line_feed_axis = font.default_line_feed_direction().axis();
@@ -312,9 +399,11 @@ where
             typesetter,
         }
     }
+    /// allows you to print a glyph
     pub fn print_glyph(&mut self, glyph: &F::Glyph) {
         Self::print_glyph_helper(&mut self.typesetter, &mut self.canvas, glyph)
     }
+    /// advances the writing position along the base line by a given amount
     pub fn skip(&mut self, width: <F::Glyph as GlyphMetrics>::Length) {
         self.typesetter.skip(width);
     }
