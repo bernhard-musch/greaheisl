@@ -7,6 +7,9 @@
 //! * may lack some important features, since I have little knowledge of typography
 //! * not well tested at all, especialy for other writing directions or coordinate conventions
 //! * So far, typesetting is restricted to a single line of text.
+//!
+//! An example of a font implemented with these traits can be found in 
+//! the crate `greaheisl_bitvecimg` with feature `fitzl_font` enabled.
 
 // no_std only when freature "std" is missing
 #![cfg_attr(not(feature = "std"), no_std)]

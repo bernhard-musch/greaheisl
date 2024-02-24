@@ -1,11 +1,21 @@
+//! This module provides a struct [`BitVecImgGlyph`] that implements
+//! the [`GlyphMetrics`] trait. Furthermore, it implements [`DrawGlyph`]
+//! for [`ImageRegionMut`] so that it can be used as a canvas for text.
+//! 
+
+
+
 use self::typeset::{canvas::DrawGlyph, directions::RectDirection, GlyphMetrics};
 pub use greaheisl_typeset as typeset;
 
 use super::{BitVecImgView, BitVecImgViewMut, Image, ImageRegionMut, PasteOperation};
 
+/// a very small bitmap font
 #[cfg(feature = "fitzl_font")]
 pub mod fitzl_font;
 
+
+/// glyph based on a `BitVecImgView`
 pub struct BitVecImgGlyph<I: BitVecImgView> {
     pub image: I,
     pub base_point: [<Self as GlyphMetrics>::Length; 2],

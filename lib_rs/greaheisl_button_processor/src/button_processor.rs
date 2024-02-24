@@ -55,9 +55,9 @@ pub trait ButtonFlagsTrait: Copy + PartialEq {
 #[derive(Clone, Debug)]
 pub struct ButtonProcessorOptions {
     /// after this many milliseconds, a first `Repeat` event is generated
-    repetition_start_delay: DurationMillis,
+    pub repetition_start_delay: DurationMillis,
     /// after this many milliseconds, another `Repeat` event is generated
-    repetition_delay: DurationMillis,
+    pub repetition_delay: DurationMillis,
 }
 
 impl core::default::Default for ButtonProcessorOptions {
@@ -93,10 +93,10 @@ impl core::default::Default for ButtonProcessorOptions {
 ///     to the desired combination. You need to ignore the
 ///     respective [`ButtonEvent::Press`] events.
 /// *   When a button combination is held down
-///     for longer than [`BUTTON_REPETITION_START_DELAY`] milliseconds,
+///     for longer than [`ButtonProcessorOptions::repetition_start_delay`] milliseconds,
 ///     a first [`ButtonEvent::Repeat`] event is issued.
 ///     Further [`ButtonEvent::Repeat`] events raised at
-///     a shorter time period, specified by [`BUTTON_REPETITION_DELAY`]
+///     a shorter time period, specified by [`ButtonProcessorOptions::repetition_delay`]
 ///     in milliseconds.
 /// *   When one or several buttons are released,
 ///     a [`ButtonEvent::Release`] event is issued.

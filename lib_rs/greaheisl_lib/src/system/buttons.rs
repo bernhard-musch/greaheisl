@@ -51,7 +51,7 @@ pub type SysButtonProcessor = ButtonProcessor<ButtonFlags>;
 
 /// modified function to wait for a button press or repeat event, up to a given timeout
 ///
-/// Unlike [`wait_button_press_or_timeout`], only the [`ButtonEvent::Repeat`] events
+/// This function is specialized in the sense that only the [`ButtonEvent::Repeat`] events
 /// of the [`ButtonFlags::Prev`] and [`ButtonFlags::Next`] buttons are recognized,
 /// other [`ButtonEvent::Repeat`] are ignored.
 ///

@@ -5,6 +5,10 @@ use super::typeset::{
 use super::BitVecImgGlyph;
 use crate::{BitVecImgView, ImageRegion};
 
+/// A very small font, defined only for capital letters and digits 0..9.
+/// The digits are extremely narrow.
+/// 
+/// Implements the [`Font`] trait.
 pub struct FitzlFontNarrowNum {}
 
 impl FontInfo for FitzlFontNarrowNum {
@@ -72,6 +76,8 @@ impl Font for FitzlFontNarrowNum {
 
 #[rustfmt::skip]
 pub mod images {
+    //! the bare images used in the font
+
     use crate::Image;
     use bitvec::prelude::*;
 
