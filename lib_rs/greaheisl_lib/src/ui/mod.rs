@@ -1,3 +1,5 @@
+//! the user interface (making use of LED matrix and buttons)
+
 use crate::system::buttons::{ButtonFlags, SysButtonProcessor, BUTTON_HOLD_DURATION};
 use crate::system::System;
 use crate::ui::components::{choose_time, SelectionResponse};

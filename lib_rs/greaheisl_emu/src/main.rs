@@ -1,3 +1,14 @@
+//! A desktop PC command line application 
+//! we can use to test and debug the user interface
+//! provided by `greaheisl_lib`.
+//!
+//! * The LED matrix is visualized as ASCII graphics.
+//! * The arrow keys serve as buttons.
+//! 
+//! Unfortunately, standard terminals do not provide raw keyboard events. 
+//! Therefore, this program needs to be run in a terminal that supports the 
+//! [kitty keyboard protocol](https://sw.kovidgoyal.net/kitty/keyboard-protocol/).
+
 //use std::thread;
 use crossterm::terminal;
 use crossterm::{ExecutableCommand, QueueableCommand};

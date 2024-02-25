@@ -1,13 +1,16 @@
 // no_std only when freature "std" is missing
 #![cfg_attr(not(feature = "std"), no_std)]
 
+/// access to the button signal
 pub trait AccessButtonSignal {
+    /// returns true if there is any button activity
     fn is_button_signal(&self) -> bool;
 }
 
 /// low level button state (each button can be pressed or not)
 pub trait AccessButtonState {
     type ButtonFlags;
+    /// returns a bitmask telling us which buttons are pressed
     fn get_button_flags(&self) -> Self::ButtonFlags;
 }
 

@@ -1,6 +1,7 @@
 # Greaheisl
 
-This repository started as a hobby project to provide programmable timers for switching on and off appliances. The chosen hardware consisted of an Arduino Uno R4 Wifi, a board with relays, and some push buttons for user interaction.
+This repository is a hobby project. It provides programmable timers for switching on and off appliances. The chosen hardware consisted of an Arduino Uno R4 Wifi, a board with relays, and some push buttons for user interaction.
+So far the wifi capability of the hardware is not used.
 
 The software is structured into 
 * [C++ code](prog/greaheisl/greaheisl.ino) intended to be compiled and uploaded onto the hardware using the the Arduino IDE, and making use of
@@ -86,6 +87,7 @@ Here is just a selection of important aspects you need to have under control:
 * required conductor cross sections
 * compatibility of the connected devices and their specified limitations 
 * humidity and temperature, cooling / ventilation
+* other environmental conditions, e.g., UV radiation from the sun damaging the insulation
 * flammeable materials near electric components
 * protection of other people, potentially children 
 * exposure to unhealthy substances
