@@ -13,10 +13,18 @@ rust-version = "1.75.0"
 [features]
 default = ["std"]
 std = ["dep:blanket"]
+doc-images = []
+
 
 [dependencies]
 blanket = {version = "0.3.0", optional = true}
+embed-doc-image = "0.1.4"
 
 [dependencies.num]
 version = "0.4"
 default-features = false
+
+[package.metadata.docs.rs]
+# instruct doc.rs to use our `doc-images` feature to
+# render any images that we may have in inner attribute documentation.
+features = ["doc-images"]

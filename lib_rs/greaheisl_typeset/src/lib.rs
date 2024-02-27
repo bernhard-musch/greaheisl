@@ -10,6 +10,61 @@
 //!
 //! An example of a font implemented with these traits can be found in 
 //! the crate `greaheisl_bitvecimg` with feature `fitzl_font` enabled.
+//!
+#![cfg_attr(feature = "doc-images",
+cfg_attr(all(),
+doc = ::embed_doc_image::embed_image!("font_coordinates", "images/font_coordinates.png"),
+))]
+#![cfg_attr(
+not(feature = "doc-images"),
+doc = "**Doc images not enabled**. Compile with feature `doc-images` and Rust version >= 1.54 \
+           to enable."
+)]
+//!
+//! # Font and glyph metrics
+//!
+//! ![Alt text goes here][font_coordinates] 
+//!
+//! Each glyph can be thought to have its own
+//! local coordinate system. Together with the
+//! size of the glyph (i.e., width and height), 
+//! this coordinate system defines a bounding
+//! box around the glyph. Note that this crate
+//! does not require that the "y" axis points
+//! downward, as shown in the illustration. 
+//! All the crate assumes is that "x" and "y"
+//! axes are mutually orthogonal.
+//! 
+//! A glyph specifies the location of 
+//! its "base point" (colored cross in the illustration)
+//! relative to its local
+//! coordinate system. The typesetter
+//! arranges the glyphs such that their base points
+//! all come to lie on one line, namely the base line.
+//! The base line need not be horizontal. Rather, this
+//! is defined by the writing direction.
+//!
+//! Each glyph defines margins on all four sides.
+//! When two glyphs are placed adjacent to each other,
+//! their margins determine the size of the gap
+//! betwenn their bounding boxes. The larger of
+//! the two relevant margins "wins".
+//!
+//! ## Behavior of the [`TextLinePrinter`] and [`LineTypesetter`]
+//!
+//! The global reference for typesetting is given
+//! by the coordinate system labelled "(ref)" in
+//! the above illustration. From the origin
+//! of this reference coordinate system, 
+//! a vector specified by the "base line offset"
+//! of the font takes us to a point on the base line.
+//! The typesetter starts at this point.
+//! The first glyph will be placed adjacent to this
+//! point, without any margin.
+//!   
+//! Multi-line text is not implemented, yet.
+//! However, for that purpose, the font already specifies a 
+//! preferred line-to-line distance.
 
 // no_std only when freature "std" is missing
 #![cfg_attr(not(feature = "std"), no_std)]

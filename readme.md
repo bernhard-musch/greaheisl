@@ -131,7 +131,7 @@ Notes:
 To browse documentation for the Rust code, change to directory `lib_rs` and run
 
 ```
-cargo doc --no-deps --document-private-items --open
+cargo doc --no-deps --document-private-items --features doc-images --open 
 ```
 
 ## License
