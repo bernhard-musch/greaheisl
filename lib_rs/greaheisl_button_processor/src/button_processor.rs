@@ -71,11 +71,6 @@ impl core::default::Default for ButtonProcessorOptions {
 
 /// button processor
 ///
-/// From the hardware, we get an on/off state for each of the buttons,
-/// encoded in "button flags" of generic type `F`.
-/// Building your logic on these raw button states is possible but
-/// cumbersome. The button processor helps you here. It recognizes
-/// state changes and turns turns them into "events".
 ///
 /// *   When one or several buttons are pushed simultaneously,
 ///     a [`ButtonEvent::Press`] event is issued.

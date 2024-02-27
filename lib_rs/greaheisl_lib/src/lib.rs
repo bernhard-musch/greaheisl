@@ -6,6 +6,10 @@
 //!   The corresponding C API is defined in module [interface_c].
 //! * It can be compiled as a normal library to be used with the `greaheisl-emu` test application.
 //!
+//! ## Features
+//!
+//! - `std`: (default) uses standard library.
+//!    *Note:* set `default-features = false` for no-std targets.
 
 // no_std only when freature "std" is missing
 #![cfg_attr(not(feature = "std"), no_std)]

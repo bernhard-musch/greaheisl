@@ -65,6 +65,11 @@ doc = "**Doc images not enabled**. Compile with feature `doc-images` and Rust ve
 //! Multi-line text is not implemented, yet.
 //! However, for that purpose, the font already specifies a 
 //! preferred line-to-line distance.
+//! 
+//! ## Features
+//!
+//! - `std`: (default) uses standard library.
+//!    *Note:* set `default-features = false` for no-std targets.
 
 // no_std only when freature "std" is missing
 #![cfg_attr(not(feature = "std"), no_std)]

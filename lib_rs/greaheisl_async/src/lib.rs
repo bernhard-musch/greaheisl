@@ -51,6 +51,10 @@
 //! assert_eq!(result,vec![10, -1, 120, -2, 220, -3, 320, -4, 420, -10, -100, 519, -20, -200, 618])
 //! ```
 //!
+//! ## Features
+//!
+//! - `std`: (default) uses standard library.
+//!    *Note:* set `default-features = false` for no-std targets.
 
 // no_std only when freature "std" is missing
 #![cfg_attr(not(feature = "std"), no_std)]

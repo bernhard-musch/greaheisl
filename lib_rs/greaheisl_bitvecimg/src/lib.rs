@@ -4,6 +4,8 @@
 //!
 //! ## Features
 //!
+//! - `std`: (default) uses standard library.
+//!    *Note:* set `default-features = false` for no-std targets.
 //! - `font`: implements the font traits of crate `greaheisl_typeset` 
 //! - `fitzl_font`: additionally includes a tiny font with very narrow digits
 //!

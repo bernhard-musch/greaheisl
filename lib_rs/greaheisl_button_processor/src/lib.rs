@@ -1,3 +1,14 @@
+//! From the hardware, we get an on/off state for each of the buttons,
+//! encoded in "button flags" of generic type `F`.
+//! Building your logic on these raw button states is possible but
+//! cumbersome. The button processor helps you here. It recognizes
+//! state changes and turns turns them into "events".
+//!
+//! ## Features
+//!
+//! - `std`: (default) uses standard library.
+//!    *Note:* set `default-features = false` for no-std targets.
+
 // no_std only when freature "std" is missing
 #![cfg_attr(not(feature = "std"), no_std)]
 
