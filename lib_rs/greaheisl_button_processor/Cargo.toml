@@ -7,7 +7,7 @@ description = "translates button state changes into events"
 readme = "../../readme.md"
 repository = "https://github.com/bernhard-musch/greaheisl/"
 license = "Apache-2.0/MIT"
-keywords = ["no_std","embedded","buttons"]
+keywords = ["no_std","embedded","button","keyboard","event"]
 rust-version = "1.75.0"
 
 [features]

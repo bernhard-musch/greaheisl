@@ -1,6 +1,6 @@
 //! # `greaheisl` library
 //!
-//! This is the major rust part of the `greaheisl` project.
+//! This is the rust part of the `greaheisl` project.
 //! This crate can be used in two ways:
 //! * It can be compiled as a no-std library and statically linked into the C++ Arduino sketch.
 //!   The corresponding C API is defined in module [interface_c].

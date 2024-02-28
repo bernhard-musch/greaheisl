@@ -7,7 +7,7 @@ description = "runs the timer control library in an emulated environment on the 
 readme = "../../readme.md"
 repository = "https://github.com/bernhard-musch/greaheisl/"
 license = "Apache-2.0/MIT"
-keywords = ["emulator","console"]
+keywords = ["console"]
 rust-version = "1.75.0"
 
 [dependencies]

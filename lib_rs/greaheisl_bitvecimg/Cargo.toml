@@ -7,7 +7,7 @@ description = "bitmapped 2D image represented in memory as bitvec"
 readme = "../../readme.md"
 repository = "https://github.com/bernhard-musch/greaheisl/"
 license = "Apache-2.0/MIT"
-keywords = ["no_std","embedded","buttons"]
+keywords = ["no_std","embedded","bitmap","image","font"]
 rust-version = "1.75.0"
 
 [features]
