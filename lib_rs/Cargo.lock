@@ -210,7 +210,7 @@ checksum = "e6d5a32815ae3f33302d95fdcb2ce17862f8c65363dcfd29360480ba1001fc9c"
 
 [[package]]
 name = "greaheisl_async"
-version = "0.1.0"
+version = "0.2.1"
 dependencies = [
  "ambassador",
  "pin-project",
@@ -218,7 +218,7 @@ dependencies = [
 
 [[package]]
 name = "greaheisl_bitvecimg"
-version = "0.1.0"
+version = "0.2.1"
 dependencies = [
  "bitvec",
  "greaheisl_typeset",
@@ -226,14 +226,14 @@ dependencies = [
 
 [[package]]
 name = "greaheisl_button_processor"
-version = "0.1.0"
+version = "0.2.1"
 dependencies = [
  "greaheisl_async",
 ]
 
 [[package]]
 name = "greaheisl_emu"
-version = "0.1.0"
+version = "0.2.1"
 dependencies = [
  "ambassador",
  "anyhow",
@@ -248,7 +248,7 @@ dependencies = [
 
 [[package]]
 name = "greaheisl_lib"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "ambassador",
  "bitmask-enum",
@@ -267,7 +267,7 @@ dependencies = [
 
 [[package]]
 name = "greaheisl_typeset"
-version = "0.1.0"
+version = "0.2.1"
 dependencies = [
  "blanket",
  "embed-doc-image",
