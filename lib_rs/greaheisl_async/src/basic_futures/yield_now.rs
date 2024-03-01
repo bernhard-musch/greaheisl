@@ -9,8 +9,11 @@ use core::task::{Context, Poll};
 ///
 /// # Note:
 ///
-/// The source code for `yield_now()` has been copied from
-/// [the async version of the Rust standard library](https://github.com/async-rs/async-std)
+/// The source code for `yield_now.rs` has been copied from
+/// [the async version of the Rust standard library](https://github.com/async-rs/async-std),
+/// more precisely
+/// [async-std/src/task/yield_now.rs](https://github.com/async-rs/async-std/blob/8947d8e03c4c267fdd3828e07368cefc7d39b002/src/task/yield_now.rs#L30)
+/// from commit 1308fbd on May 2, 2020.
 
 #[inline]
 pub async fn yield_now() {
