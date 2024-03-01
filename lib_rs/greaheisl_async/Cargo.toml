@@ -2,6 +2,7 @@
 name = "greaheisl_async"
 description = "simple async multitasking for single-core embedded devices"
 keywords = ["no_std","embedded","multitasking","executor"]
+categories=["asynchronous","embedded","no-std"]
 
 version.workspace = true
 edition.workspace = true

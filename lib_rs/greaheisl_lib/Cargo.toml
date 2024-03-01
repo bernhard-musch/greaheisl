@@ -2,6 +2,7 @@
 name = "greaheisl_lib"
 description = "Rust part of a timer control application on the Arduino UNO R4 Wifi"
 keywords = ["no_std", "embedded", "ui"]
+categories=["asynchronous","embedded","no-std","gui"]
 
 version.workspace = true
 edition.workspace = true

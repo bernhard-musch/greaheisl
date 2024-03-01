@@ -2,6 +2,7 @@
 name = "greaheisl_emu"
 description = "runs the timer control library in an emulated environment on the console"
 keywords = ["console"]
+categories=["emulators"]
 
 version.workspace = true
 edition.workspace = true

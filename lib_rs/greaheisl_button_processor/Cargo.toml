@@ -2,6 +2,7 @@
 name = "greaheisl_button_processor"
 description = "translates button state changes into events"
 keywords = ["no_std","embedded","button","keyboard","event"]
+categories=["no-std","embedded","asynchronous"]
 
 version.workspace = true
 edition.workspace = true

@@ -2,6 +2,7 @@
 name = "greaheisl_bitvecimg"
 description = "bitmapped 2D image represented in memory as bitvec"
 keywords = ["no_std","embedded","bitmap","image","font"]
+categories=["embedded","no-std","data-structures"]
 
 version.workspace = true
 edition.workspace = true
