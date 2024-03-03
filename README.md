@@ -1,5 +1,7 @@
 # Greaheisl
 
+**Notice: This project is experimental. The libraries are not ready for production use.**
+
 This repository is a hobby project. It provides programmable timers for switching on and off appliances. The chosen hardware consisted of an Arduino Uno R4 Wifi, a board with relays, and some push buttons for user interaction.
 So far the wifi capability of the hardware is not used.
 

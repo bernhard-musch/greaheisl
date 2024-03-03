@@ -1,8 +1,8 @@
 [package]
 name = "greaheisl_typeset"
 description = "typesetting based on simple abstract definition of font and glyph"
-keywords = ["font", "typography", "no_std", "embedded"]
-categories=["embedded","no-std","graphics"]
+keywords = ["font", "typography", "no_std"]
+categories=["no-std","graphics"]
 
 version.workspace = true
 edition.workspace = true
